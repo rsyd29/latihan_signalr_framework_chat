@@ -1,22 +1,23 @@
 class MessageModel {
-  String id;
+  // String id;
   String name;
   String message;
-  String date;
+
+  // String date;
 
   MessageModel({
-    required this.id,
+    // required this.id,
     required this.name,
     required this.message,
-    required this.date,
+    // required this.date,
   });
 
   factory MessageModel.fromJson(Map<String, dynamic> json) {
     return MessageModel(
-      id: json['id'],
+      // id: json['id'],
       name: json['name'],
       message: json['message'],
-      date: json['date'],
+      // date: json['date'],
     );
   }
 }

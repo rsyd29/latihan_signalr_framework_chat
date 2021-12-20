@@ -21,31 +21,35 @@ class ChatController extends GetxController {
     print('HomeController.startConnection');
 
     signalR = SignalR(
-      'http://192.168.1.104:8321/',
+      // 'http://10.0.2.2:8321/', // Emulator
+      'http://192.168.1.71:8321/', // Wifi Kantor
+      // 'http://192.168.1.104:8321/', // Wifi Rumah
       "ChatHub",
-      hubMethods: ["addNewMessageToPage"],
+      hubMethods: ["addNewMessageToPag"],
       statusChangeCallback: (status) {
         print("statusChangeCallback: $status");
         statusConnection.value = status.toString();
       },
-      hubCallback: (methodName, message) {
-        print('MethodName = $methodName, Message = $message');
-      },
+      hubCallback: _onNewMessage,
     );
 
     await signalR.connect();
   }
 
+  _onNewMessage(String? methodName, dynamic message) {
+    print('MethodName = $methodName, Message = $message');
+  }
+
   Future<void> sendMessage(
       {required String name, required String message}) async {
     var messageJson = {
-      "id": signalR.connectionId,
+      // "id": signalR.connectionId,
       "name": name,
       "message": message,
-      "date": DateTime.now().toIso8601String(),
+      // "date": DateTime.now().toIso8601String(),
     };
 
-    await signalR.invokeMethod('Send', arguments: [
+    final res = await signalR.invokeMethod('Send', arguments: [
       name,
       message,
     ]).catchError((error) {
@@ -54,14 +58,16 @@ class ChatController extends GetxController {
 
     chatMessage.add(MessageModel.fromJson(messageJson));
 
+    print("response: $res");
+
     chatController.clear();
   }
 
   @override
   void onInit() {
+    super.onInit();
     chatController = TextEditingController();
     startConnection();
-    super.onInit();
   }
 
   @override

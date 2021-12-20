@@ -43,11 +43,11 @@ class ChatView extends GetView<ChatController> {
                     var currentItem = controller.chatMessage[index];
                     return MessageItem(
                       key: key,
-                      sentByMe:
-                          currentItem.id == controller.signalR.connectionId,
+                      // sentByMe:
+                      //     currentItem.id == controller.signalR.connectionId,
                       name: currentItem.name,
                       message: currentItem.message,
-                      date: currentItem.date,
+                      // date: currentItem.date,
                     );
                   },
                 );
@@ -85,7 +85,7 @@ class ChatView extends GetView<ChatController> {
                         onPressed: () async {
                           if (controller.chatController.text.isNotEmpty) {
                             await controller.sendMessage(
-                              name: "Budiman Handphone",
+                              name: "B",
                               message: controller.chatController.text.trim(),
                             );
                           }
@@ -110,22 +110,24 @@ class ChatView extends GetView<ChatController> {
 class MessageItem extends StatelessWidget {
   const MessageItem({
     Key? key,
-    required this.sentByMe,
+    // required this.sentByMe,
     required this.message,
-    required this.date,
+    // required this.date,
     required this.name,
   }) : super(key: key);
 
-  final bool sentByMe;
+  // final bool sentByMe;
   final String message;
-  final String date;
+
+  // final String date;
   final String name;
 
   @override
   Widget build(BuildContext context) {
-    var parseDate = DateTime.parse(date);
+    // var parseDate = DateTime.parse(date);
     return Align(
-      alignment: sentByMe ? Alignment.centerRight : Alignment.centerLeft,
+      // alignment: sentByMe ? Alignment.centerRight : Alignment.centerLeft,
+      alignment: Alignment.center,
       child: Container(
         padding: EdgeInsets.symmetric(
           vertical: 5,
@@ -136,26 +138,33 @@ class MessageItem extends StatelessWidget {
           horizontal: 10,
         ),
         decoration: BoxDecoration(
-          color: sentByMe ? blue : white,
+          // color: sentByMe ? blue : white,
+          color: white,
           borderRadius: BorderRadius.circular(5),
         ),
-        child: Row(
+        child: Column(
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.baseline,
+          crossAxisAlignment: CrossAxisAlignment.center,
           textBaseline: TextBaseline.alphabetic,
           children: [
             Text(
-              message,
-              style: TextStyle(fontSize: 18, color: sentByMe ? white : blue),
+              name + ": ",
+              style: TextStyle(
+                fontSize: 14,
+                // color: sentByMe ? white : blue,
+                color: blue,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             SizedBox(
               width: 5,
             ),
             Text(
-              DateFormat.jm().format(parseDate),
+              message,
               style: TextStyle(
-                fontSize: 10,
-                color: (sentByMe ? white : blue).withOpacity(0.7),
+                fontSize: 14,
+                // color: (sentByMe ? white : blue).withOpacity(0.7),
+                color: blue.withOpacity(0.7),
               ),
             ),
           ],
