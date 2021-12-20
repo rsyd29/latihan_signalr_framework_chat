@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -44,8 +46,8 @@ class ChatView extends GetView<ChatController> {
                       key: key,
                       // sentByMe:
                       //     currentItem.id == controller.signalR.connectionId,
-                      name: currentItem.name,
-                      message: currentItem.message,
+                      name: currentItem.Name,
+                      message: currentItem.Message,
                       // date: currentItem.date,
                     );
                   },
@@ -83,9 +85,14 @@ class ChatView extends GetView<ChatController> {
                       child: IconButton(
                         onPressed: () async {
                           if (controller.chatController.text.isNotEmpty) {
+                            var messageData = {
+                              "Name": 'Budiman Handphone',
+                              "Message": controller.chatController.text.trim(),
+                            };
+                            final jsonEncoder = JsonEncoder();
+                            var data = jsonEncoder.convert(messageData);
                             await controller.sendMessage(
-                              name: "B",
-                              message: controller.chatController.text.trim(),
+                              messageData: data,
                             );
                           }
                         },

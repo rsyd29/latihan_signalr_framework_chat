@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:latihan_signalr_framework_chat/app/data/message.dart';
@@ -11,7 +13,8 @@ class ChatController extends GetxController {
 
   var statusConnection = ''.obs;
 
-  final serviceUrl = 'http://192.168.1.71:8321/';
+  final serviceUrl = 'http://192.168.1.71:8765/';
+  final jsonEncoder = JsonEncoder();
 
   @override
   void onInit() {
@@ -40,27 +43,32 @@ class ChatController extends GetxController {
     await signalR.connect();
   }
 
-  _onNewMessage(String methodName, dynamic message) {
-    print('onNewMessage');
-    print('MethodName = $methodName, Message = $message');
+  _onNewMessage(String methodName, dynamic messageData) {
+    // print('onNewMessage');
+    print('MethodName = $methodName, Message = $messageData');
+    print('MessageData Tipe Data: ${messageData.toString()}');
+
+    final jsonDecode = JsonDecoder();
+
+    Map<String, dynamic> data = jsonDecode.convert(messageData);
+
+    var messageJsonData = {
+      'Name': data['Name'],
+      'Message': data['Message'],
+    };
+    chatMessage.add(MessageModel.fromJson(messageJsonData));
   }
 
-  Future<void> sendMessage(
-      {required String name, required String message}) async {
-    var messageJson = {
-      "name": name,
-      "message": message,
-    };
+  Future<void> sendMessage({required String messageData}) async {
     final res = await signalR.invokeMethod('Send', arguments: [
-      name,
-      message,
+      messageData,
     ]).catchError((error) {
       print("Error invokeMethod: ${error.toString()}");
     }).then((value) {
       print("value: $value");
     });
     print("response: $res");
-    chatMessage.add(MessageModel.fromJson(messageJson));
+
     chatController.clear();
     update();
   }
