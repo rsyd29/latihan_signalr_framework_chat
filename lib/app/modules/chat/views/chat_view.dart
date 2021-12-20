@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:latihan_signalr_framework_chat/constant.dart';
 
 import '../controllers/chat_controller.dart';
