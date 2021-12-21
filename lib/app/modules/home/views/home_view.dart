@@ -59,7 +59,8 @@ class HomeView extends GetView<HomeController> {
                     Get.toNamed(
                       Routes.CHAT,
                       arguments: controller.nameController.text,
-                    );
+                    )!
+                        .then((_) => controller.nameController.clear());
                   } else {
                     Get.snackbar(
                       'Warning!',

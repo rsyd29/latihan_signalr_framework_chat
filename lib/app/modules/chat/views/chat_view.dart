@@ -14,7 +14,10 @@ class ChatView extends GetView<ChatController> {
       backgroundColor: black,
       appBar: AppBar(
         backgroundColor: blue,
-        title: Text('Chat Room'),
+        title: Text(
+          'Chat Room\n${Get.arguments}',
+          textAlign: TextAlign.center,
+        ),
         centerTitle: true,
       ),
       body: Container(
@@ -24,34 +27,19 @@ class ChatView extends GetView<ChatController> {
               child: Obx(
                 () => Container(
                   padding: EdgeInsets.all(10.0),
-                  child: Column(
-                    children: [
-                      Text(
-                        'Connection Status:\n${controller.statusConnection}',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: white,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      SizedBox(
-                        height: 3,
-                      ),
-                      Text(
-                        'Your name is ${Get.arguments} (${controller.signalR.connectionId})',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: white,
-                        ),
-                        textAlign: TextAlign.center,
-                      )
-                    ],
+                  child: Text(
+                    'Connection Status:\n${controller.statusConnection}',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: white,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
                 ),
               ),
             ),
             Expanded(
-              flex: 5,
+              flex: 6,
               child: Obx(() {
                 return ListView.builder(
                   itemCount: controller.chatMessage.length,
@@ -71,49 +59,53 @@ class ChatView extends GetView<ChatController> {
             ),
             Expanded(
               child: Container(
-                padding: EdgeInsets.all(10.0),
-                child: TextField(
-                  style: TextStyle(color: Colors.white),
-                  cursorColor: blue,
-                  controller: controller.chatController,
-                  decoration: InputDecoration(
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.white,
-                      ),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.white,
-                      ),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    suffixIcon: Container(
-                      decoration: BoxDecoration(
-                        color: blue,
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(10),
-                          bottomRight: Radius.circular(10),
-                        ),
-                      ),
-                      child: IconButton(
-                        onPressed: () async {
-                          if (controller.chatController.text.isNotEmpty) {
-                            var messageData = {
-                              "Name": Get.arguments,
-                              "Message": controller.chatController.text.trim(),
-                            };
-                            final jsonEncoder = JsonEncoder();
-                            var data = jsonEncoder.convert(messageData);
-                            await controller.sendMessage(
-                              messageData: data,
-                            );
-                          }
-                        },
-                        icon: Icon(
-                          Icons.send,
+                padding: EdgeInsets.symmetric(horizontal: 8),
+                child: SingleChildScrollView(
+                  physics: const ScrollPhysics(),
+                  child: TextFormField(
+                    style: TextStyle(color: Colors.white),
+                    cursorColor: blue,
+                    controller: controller.chatController,
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
                           color: Colors.white,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.white,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      suffixIcon: Container(
+                        decoration: BoxDecoration(
+                          color: blue,
+                          borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(10),
+                            bottomRight: Radius.circular(10),
+                          ),
+                        ),
+                        child: IconButton(
+                          onPressed: () async {
+                            if (controller.chatController.text.isNotEmpty) {
+                              var messageData = {
+                                "Name": Get.arguments,
+                                "Message":
+                                    controller.chatController.text.trim(),
+                              };
+                              final jsonEncoder = JsonEncoder();
+                              var data = jsonEncoder.convert(messageData);
+                              await controller.sendMessage(
+                                messageData: data,
+                              );
+                            }
+                          },
+                          icon: Icon(
+                            Icons.send,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
