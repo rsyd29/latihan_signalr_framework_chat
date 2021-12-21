@@ -24,13 +24,53 @@ class HomeView extends GetView<HomeController> {
               'Latihan SignalR Framework Chat App',
               style: TextStyle(color: white),
             ),
-            SizedBox(
-              height: 8,
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              child: TextFormField(
+                controller: controller.nameController,
+                style: TextStyle(color: Colors.white),
+                decoration: const InputDecoration(
+                  icon: Icon(
+                    Icons.person,
+                    color: Colors.white,
+                  ),
+                  hintText: 'What do people call you?',
+                  hintStyle: TextStyle(color: Colors.white),
+                  labelText: 'Name *',
+                  labelStyle: TextStyle(color: Colors.white),
+                  border: InputBorder.none,
+                ),
+                validator: (String? value) {
+                  return (value != null && value.contains('@'))
+                      ? 'Do not use the @ char.'
+                      : null;
+                },
+              ),
             ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(primary: blue),
-              child: Text('Chat Room'),
-              onPressed: () => Get.toNamed(Routes.CHAT),
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(primary: blue),
+                child: Text('Chat Room'),
+                onPressed: () {
+                  if (controller.nameController.text.trim().isNotEmpty) {
+                    Get.toNamed(
+                      Routes.CHAT,
+                      arguments: controller.nameController.text,
+                    );
+                  } else {
+                    Get.snackbar(
+                      'Warning!',
+                      'Please fill in the field form',
+                      snackPosition: SnackPosition.BOTTOM,
+                      backgroundColor: Colors.amber,
+                      colorText: Colors.white,
+                    );
+                  }
+                },
+              ),
             ),
           ],
         ),

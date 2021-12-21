@@ -24,19 +24,34 @@ class ChatView extends GetView<ChatController> {
               child: Obx(
                 () => Container(
                   padding: EdgeInsets.all(10.0),
-                  child: Text(
-                    'Connection Status:\n${controller.statusConnection}',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: white,
-                    ),
-                    textAlign: TextAlign.center,
+                  child: Column(
+                    children: [
+                      Text(
+                        'Connection Status:\n${controller.statusConnection}',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: white,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(
+                        height: 3,
+                      ),
+                      Text(
+                        'Your name is ${Get.arguments} (${controller.signalR.connectionId})',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: white,
+                        ),
+                        textAlign: TextAlign.center,
+                      )
+                    ],
                   ),
                 ),
               ),
             ),
             Expanded(
-              flex: 9,
+              flex: 5,
               child: Obx(() {
                 return ListView.builder(
                   itemCount: controller.chatMessage.length,
@@ -86,7 +101,7 @@ class ChatView extends GetView<ChatController> {
                         onPressed: () async {
                           if (controller.chatController.text.isNotEmpty) {
                             var messageData = {
-                              "Name": 'Budiman Handphone',
+                              "Name": Get.arguments,
                               "Message": controller.chatController.text.trim(),
                             };
                             final jsonEncoder = JsonEncoder();
